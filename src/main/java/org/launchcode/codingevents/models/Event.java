@@ -1,16 +1,15 @@
 package org.launchcode.codingevents.models;
 
-import jakarta.validation.constraints.*;
-
-import java.util.Objects;
+import jakarta.persistence.Entity;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 /**
  * Created by Chris Bay
  */
-public class Event {
-
-    private int id;
-    private static int nextId = 1;
+@Entity
+public class Event extends AbstractEntity  {
 
     @NotBlank(message = "Name is required")
     @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters")
@@ -23,34 +22,20 @@ public class Event {
     @Email(message = "Invalid email. Try again.")
     private String contactEmail;
 
-    @NotBlank(message = "Location is required")
-    @Size(min =3, max=50, message = "Location must be between 3 and 50 characters")
-    private String location;
+    private EventType type;
 
-    @NotNull(message = "Is registration required?")
-    private boolean registration;
-
-    @Positive(message = "Must be a number over 0.")
-    private int numberOfAttendees;
-
-    public Event(String name, String description, String location, boolean registration, int numberOfAttendees, String contactEmail) {
-        this();
+    public Event(String name, String description, String contactEmail, EventType type) {
         this.name = name;
         this.description = description;
-        this.location = location;
-        this.registration = registration;
-        this.numberOfAttendees = numberOfAttendees;
         this.contactEmail = contactEmail;
+        this.type = type;
     }
 
-    public Event() {
-        this.id = nextId;
-        nextId++;
-    }
+    public Event() {}
+
     public String getName() {
         return name;
     }
-
 
     public void setName(String name) {
         this.name = name;
@@ -72,30 +57,12 @@ public class Event {
         this.contactEmail = contactEmail;
     }
 
-    public String getLocation() { return location; }
-
-    public void setLocation(String location) {
-        this.location = location;
+    public EventType getType() {
+        return type;
     }
 
-    public boolean isRegistration() {
-        return registration;
-    }
-
-    public void setRegistration(boolean registration) {
-        this.registration = registration;
-    }
-
-    public int getNumberOfAttendees() {
-        return numberOfAttendees;
-    }
-
-    public void setNumberOfAttendees(int numberOfAttendees) {
-        this.numberOfAttendees = numberOfAttendees;
-    }
-
-    public int getId() {
-        return id;
+    public void setType(EventType type) {
+        this.type = type;
     }
 
     @Override
@@ -103,16 +70,4 @@ public class Event {
         return name;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Event event = (Event) o;
-        return id == event.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }
